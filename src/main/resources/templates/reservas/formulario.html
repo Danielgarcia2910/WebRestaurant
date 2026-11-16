@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('Reservas')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuPublico('reservas')}"></nav>
+
+<main>
+    <h2 class="titulo-pagina">Reservar una mesa</h2>
+    <p>Déjanos tus datos y te llamaremos para confirmar tu reserva.</p>
+
+    <div th:replace="~{fragmentos/comunes :: avisos}"></div>
+
+    <form method="post" class="formulario" th:object="${reserva}" th:action="@{/reservas}">
+        <label>Nombre
+            <input type="text" th:field="*{nombre}" maxlength="80">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+
+        <label>Teléfono
+            <input type="text" th:field="*{telefono}" maxlength="20">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></p>
+
+        <label>Fecha
+            <input type="date" th:field="*{fecha}" th:min="${hoy}">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('fecha')}" th:errors="*{fecha}"></p>
+
+        <label>Hora
+            <select name="hora">
+                <option value="">Elige una hora</option>
+                <option th:each="h : ${horas}"
+                        th:value="${h}"
+                        th:text="${h}"
+                        th:selected="${reserva.hora != null and reserva.hora.toString() == h}">12:00</option>
+            </select>
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('hora')}" th:errors="*{hora}"></p>
+
+        <label>Número de personas
+            <input type="number" th:field="*{personas}" min="1" max="20">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('personas')}" th:errors="*{personas}"></p>
+
+        <label>Notas (opcional)
+            <textarea th:field="*{notas}" maxlength="300" placeholder="Cumpleaños, alergias, silla para bebé…"></textarea>
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('notas')}" th:errors="*{notas}"></p>
+
+        <div>
+            <button type="submit">Reservar mesa</button>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>
