@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('Categorías')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuAdmin('categorias')}"></nav>
+
+<main>
+    <h2>Categorías</h2>
+
+    <div th:replace="~{fragmentos/comunes :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(categorias)}">Todavía no hay categorías.</p>
+
+    <table th:unless="${#lists.isEmpty(categorias)}">
+        <thead>
+        <tr><th>Nombre</th><th>Platos</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="x : ${categorias}">
+            <td th:text="${x.nombre}">Nombre</td>
+            <td th:text="${#lists.size(x.platos)}">0</td>
+            <td>
+                <div class="acciones">
+                    <a th:href="@{/admin/categorias/{id}/editar(id=${x.id})}">Editar</a>
+                    <form method="post" class="en-linea" th:action="@{/admin/categorias/{id}/eliminar(id=${x.id})}">
+                        <button type="submit" class="peligro">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2 th:text="${categoria.id} == null ? 'Nueva categoría' : 'Editar categoría'">Nueva categoría</h2>
+
+    <form method="post" class="en-linea" th:object="${categoria}" th:action="@{/admin/categorias/guardar}">
+        <input type="hidden" th:field="*{id}">
+        <label>Nombre <input type="text" th:field="*{nombre}"></label>
+        <p class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+        <button type="submit">Guardar</button>
+        <a th:if="${categoria.id != null}" th:href="@{/admin/categorias}">Cancelar</a>
+    </form>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>

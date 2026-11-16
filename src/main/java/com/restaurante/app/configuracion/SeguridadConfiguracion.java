@@ -31,8 +31,7 @@ public class SeguridadConfiguracion {
                 .permitAll())
             .logout(salir -> salir.logoutSuccessUrl("/"))
             .httpBasic(Customizer.withDefaults())
-            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**", "/h2-console/**"))
-            .headers(cabeceras -> cabeceras.frameOptions(marcos -> marcos.sameOrigin()));
+            .csrf(csrf -> csrf.ignoringRequestMatchers("/api/**"));
         return http.build();
     }
 

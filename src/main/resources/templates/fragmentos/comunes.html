@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="cabeza(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' · WebRestaurant'">WebRestaurant</title>
+    <link rel="stylesheet" th:href="@{/css/stilos.css}">
+</head>
+<body>
+
+<header th:fragment="cabecera">
+    <h1><a th:href="@{/}">WebRestaurant</a></h1>
+</header>
+
+<nav th:fragment="menuPublico(activo)">
+    <a th:href="@{/menu}" th:classappend="${activo == 'menu' and categoriaId == null} ? 'activo'">Menú</a>
+    <a th:each="c : ${categoriasMenu}"
+       th:href="@{/menu(categoriaId=${c.id})}"
+       th:text="${c.nombre}"
+       th:classappend="${activo == 'menu' and categoriaId == c.id} ? 'activo'">Categoría</a>
+    <a class="reservar" th:href="@{/reservas}" th:classappend="${activo == 'reservas'} ? 'activo'">Reservas</a>
+</nav>
+
+<nav th:fragment="menuAdmin(activo)">
+    <a th:href="@{/admin/platos}"       th:classappend="${activo == 'platos'} ? 'activo'">Platos</a>
+    <a th:href="@{/admin/categorias}"   th:classappend="${activo == 'categorias'} ? 'activo'">Categorías</a>
+    <a th:href="@{/admin/ingredientes}" th:classappend="${activo == 'ingredientes'} ? 'activo'">Ingredientes</a>
+    <a th:href="@{/admin/reservas}"     th:classappend="${activo == 'reservas'} ? 'activo'">Reservas</a>
+    <a th:href="@{/menu}">Ver menú</a>
+    <form class="salir" method="post" th:action="@{/logout}">
+        <button type="submit">Cerrar sesión</button>
+    </form>
+</nav>
+
+<div th:fragment="avisos">
+    <p class="aviso" th:if="${mensaje}" th:text="${mensaje}"></p>
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+</div>
+
+<footer th:fragment="pie">
+    <p>WebRestaurant · <a class="acceso" th:href="@{/admin/platos}">Acceso del personal</a></p>
+</footer>
+
+</body>
+</html>

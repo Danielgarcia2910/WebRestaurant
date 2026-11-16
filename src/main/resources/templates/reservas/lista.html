@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('Reservas')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuAdmin('reservas')}"></nav>
+
+<main>
+    <h2>Reservas</h2>
+
+    <div th:replace="~{fragmentos/comunes :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(reservas)}">Todavía no hay reservas.</p>
+
+    <table th:unless="${#lists.isEmpty(reservas)}">
+        <thead>
+        <tr><th>Fecha</th><th>Hora</th><th>Nombre</th><th>Teléfono</th><th>Personas</th><th>Notas</th><th>Estado</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="r : ${reservas}" th:classappend="${r.estado.name() == 'CANCELADA'} ? 'agotado'">
+            <td th:text="${r.fechaTexto}">01/01/2026</td>
+            <td th:text="${r.horaTexto}">19:00</td>
+            <td th:text="${r.nombre}">Nombre</td>
+            <td th:text="${r.telefono}">3000000000</td>
+            <td th:text="${r.personas}">2</td>
+            <td th:text="${r.notas}">Notas</td>
+            <td th:text="${r.estado.etiqueta}">Pendiente</td>
+            <td>
+                <div class="acciones">
+                    <form method="post" class="en-linea" th:if="${r.estado.name() == 'PENDIENTE'}"
+                          th:action="@{/admin/reservas/{id}/confirmar(id=${r.id})}">
+                        <button type="submit">Confirmar</button>
+                    </form>
+                    <form method="post" class="en-linea" th:unless="${r.estado.name() == 'CANCELADA'}"
+                          th:action="@{/admin/reservas/{id}/cancelar(id=${r.id})}">
+                        <button type="submit" class="peligro">Cancelar</button>
+                    </form>
+                    <form method="post" class="en-linea"
+                          th:action="@{/admin/reservas/{id}/eliminar(id=${r.id})}">
+                        <button type="submit" class="peligro">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>

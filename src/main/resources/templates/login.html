@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('Iniciar sesión')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuPublico('')}"></nav>
+
+<main>
+    <h2>Iniciar sesión</h2>
+
+    <p class="error" th:if="${param.error}">Usuario o contraseña incorrectos.</p>
+    <p class="aviso" th:if="${param.logout}">Sesión cerrada.</p>
+
+    <form method="post" class="formulario" th:action="@{/login}">
+        <label>Usuario
+            <input type="text" name="username" autofocus>
+        </label>
+        <label>Contraseña
+            <input type="password" name="password">
+        </label>
+        <div>
+            <button type="submit">Entrar</button>
+            <a th:href="@{/menu}">Volver al menú</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>

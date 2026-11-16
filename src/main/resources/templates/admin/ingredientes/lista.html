@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('Ingredientes')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuAdmin('ingredientes')}"></nav>
+
+<main>
+    <h2>Ingredientes</h2>
+
+    <div th:replace="~{fragmentos/comunes :: avisos}"></div>
+
+    <p class="vacio" th:if="${#lists.isEmpty(ingredientes)}">Todavía no hay ingredientes.</p>
+
+    <table th:unless="${#lists.isEmpty(ingredientes)}">
+        <thead>
+        <tr><th>Nombre</th><th>Platos</th><th></th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="x : ${ingredientes}">
+            <td th:text="${x.nombre}">Nombre</td>
+            <td th:text="${#sets.size(x.platos)}">0</td>
+            <td>
+                <div class="acciones">
+                    <a th:href="@{/admin/ingredientes/{id}/editar(id=${x.id})}">Editar</a>
+                    <form method="post" class="en-linea" th:action="@{/admin/ingredientes/{id}/eliminar(id=${x.id})}">
+                        <button type="submit" class="peligro">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2 th:text="${ingrediente.id} == null ? 'Nuevo ingrediente' : 'Editar ingrediente'">Nuevo ingrediente</h2>
+
+    <form method="post" class="en-linea" th:object="${ingrediente}" th:action="@{/admin/ingredientes/guardar}">
+        <input type="hidden" th:field="*{id}">
+        <label>Nombre <input type="text" th:field="*{nombre}"></label>
+        <p class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+        <button type="submit">Guardar</button>
+        <a th:if="${ingrediente.id != null}" th:href="@{/admin/ingredientes}">Cancelar</a>
+    </form>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>

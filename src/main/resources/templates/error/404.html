@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('No encontrado')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<main>
+    <h2>No encontrado</h2>
+    <p th:text="${mensaje} ?: 'Esa página no existe.'">Eso no existe.</p>
+    <a th:href="@{/menu}">← Volver al menú</a>
+</main>
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>

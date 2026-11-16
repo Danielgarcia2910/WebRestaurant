@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('Platos')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuAdmin('platos')}"></nav>
+
+<main>
+    <h2>Platos</h2>
+
+    <div th:replace="~{fragmentos/comunes :: avisos}"></div>
+
+    <a th:href="@{/admin/platos/nuevo}">Añadir plato</a>
+
+    <p class="vacio" th:if="${#lists.isEmpty(platos)}">Todavía no hay platos.</p>
+
+    <table th:unless="${#lists.isEmpty(platos)}">
+        <thead>
+        <tr>
+            <th>Foto</th><th>Nombre</th><th>Categoría</th><th>Precio</th><th>Estado</th><th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="p : ${platos}" th:classappend="${p.disponible} ? '' : 'agotado'">
+            <td>
+                <img class="mini" alt="Foto"
+                     th:src="${p.foto} != null ? @{/fotos/{n}(n=${p.foto})} : @{/img/sin-foto.png}">
+            </td>
+            <td th:text="${p.nombre}">Plato</td>
+            <td th:text="${p.nombreCategoria}">Categoría</td>
+            <td th:text="'$ ' + ${#numbers.formatDecimal(p.precio, 1, 'POINT', 0, 'COMMA')}">$ 10.000</td>
+            <td th:text="${p.estado}">Disponible</td>
+            <td>
+                <div class="acciones">
+                    <a th:href="@{/admin/platos/{id}/editar(id=${p.id})}">Editar</a>
+                    <form method="post" class="en-linea" th:action="@{/admin/platos/{id}/disponibilidad(id=${p.id})}">
+                        <button type="submit" th:text="${p.disponible} ? 'Marcar agotado' : 'Marcar disponible'">Cambiar</button>
+                    </form>
+                    <form method="post" class="en-linea" th:action="@{/admin/platos/{id}/eliminar(id=${p.id})}">
+                        <button type="submit" class="peligro">Eliminar</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>

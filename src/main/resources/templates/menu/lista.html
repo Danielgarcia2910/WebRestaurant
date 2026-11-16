@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('Menú')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuPublico('menu')}"></nav>
+
+<main>
+    <h2 class="titulo-pagina">Menú</h2>
+
+    <form method="get" th:action="@{/menu}" class="busqueda">
+        <input type="text" name="buscar" th:value="${buscar}" placeholder="Buscar un plato…">
+        <input type="hidden" name="categoriaId" th:if="${categoriaId != null}" th:value="${categoriaId}">
+        <button type="submit">Buscar</button>
+        <a th:if="${categoriaId == null}" th:href="@{/menu}">Limpiar</a>
+        <a th:if="${categoriaId != null}" th:href="@{/menu(categoriaId=${categoriaId})}">Limpiar</a>
+    </form>
+
+    <p class="vacio" th:if="${#maps.isEmpty(grupos)}">No hay platos que coincidan con la búsqueda.</p>
+
+    <section th:each="grupo : ${grupos}">
+        <h2 class="categoria-titulo" th:text="${grupo.key}">Categoría</h2>
+        <div class="platos">
+            <article class="plato" th:each="p : ${grupo.value}" th:classappend="${p.disponible} ? '' : 'agotado'">
+                <img alt="Foto del plato"
+                     th:src="${p.foto} != null ? @{/fotos/{n}(n=${p.foto})} : @{/img/sin-foto.png}">
+                <h3>
+                    <a th:href="@{/menu/{id}(id=${p.id})}" th:text="${p.nombre}">Plato</a>
+                    <span class="etiqueta" th:unless="${p.disponible}">Agotado</span>
+                </h3>
+                <p th:text="${p.descripcion}">Descripción</p>
+                <p class="precio" th:text="'$ ' + ${#numbers.formatDecimal(p.precio, 1, 'POINT', 0, 'COMMA')}">$ 10.000</p>
+            </article>
+        </div>
+    </section>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>

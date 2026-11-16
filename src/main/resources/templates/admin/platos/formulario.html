@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza('Plato')}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuAdmin('platos')}"></nav>
+
+<main>
+    <h2 th:text="${plato.id} == null ? 'Nuevo plato' : 'Editar plato'">Nuevo plato</h2>
+
+    <div th:replace="~{fragmentos/comunes :: avisos}"></div>
+
+    <form method="post" enctype="multipart/form-data" class="formulario"
+          th:object="${plato}" th:action="@{/admin/platos/guardar}">
+
+        <input type="hidden" th:field="*{id}">
+
+        <label>Nombre
+            <input type="text" th:field="*{nombre}">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></p>
+
+        <label>Descripción
+            <textarea th:field="*{descripcion}"></textarea>
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></p>
+
+        <label>Precio
+            <input type="number" step="0.01" min="0.01" th:field="*{precio}">
+        </label>
+        <p class="error" th:if="${#fields.hasErrors('precio')}" th:errors="*{precio}"></p>
+
+        <label>Categoría
+            <select name="categoriaId">
+                <option value="">Sin categoría</option>
+                <option th:each="c : ${categorias}"
+                        th:value="${c.id}"
+                        th:text="${c.nombre}"
+                        th:selected="${c.id == categoriaSeleccionada}">Categoría</option>
+            </select>
+        </label>
+
+        <fieldset>
+            <legend>Ingredientes</legend>
+            <p class="vacio" th:if="${#lists.isEmpty(todosIngredientes)}">Todavía no hay ingredientes.</p>
+            <label class="opcion" th:each="i : ${todosIngredientes}">
+                <input type="checkbox" name="ingredienteIds"
+                       th:value="${i.id}"
+                       th:checked="${#sets.contains(ingredientesSeleccionados, i.id)}">
+                <span th:text="${i.nombre}">Ingrediente</span>
+            </label>
+        </fieldset>
+
+        <label class="opcion">
+            <input type="checkbox" th:field="*{disponible}">
+            <span>Disponible</span>
+        </label>
+
+        <label>Foto <small>(JPG, PNG o WEBP, máximo 1 MB)</small>
+            <input type="file" name="archivoFoto" accept="image/*">
+        </label>
+        <img class="portada" alt="Foto actual" th:if="${plato.foto != null}"
+             th:src="@{/fotos/{n}(n=${plato.foto})}">
+
+        <div>
+            <button type="submit">Guardar</button>
+            <a th:href="@{/admin/platos}">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>

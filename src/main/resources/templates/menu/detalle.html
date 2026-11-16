@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/comunes :: cabeza(${plato.nombre})}"></head>
+<body>
+<header th:replace="~{fragmentos/comunes :: cabecera}"></header>
+<nav    th:replace="~{fragmentos/comunes :: menuPublico('menu')}"></nav>
+
+<main class="detalle">
+    <h2 class="titulo-pagina">
+        <span th:text="${plato.nombre}">Plato</span>
+        <span class="etiqueta" th:unless="${plato.disponible}">Agotado</span>
+    </h2>
+
+    <img class="portada" alt="Foto del plato"
+         th:src="${plato.foto} != null ? @{/fotos/{n}(n=${plato.foto})} : @{/img/sin-foto.png}">
+
+    <p th:text="${plato.descripcion}">Descripción</p>
+
+    <dl>
+        <dt>Precio</dt>
+        <dd class="precio" th:text="'$ ' + ${#numbers.formatDecimal(plato.precio, 1, 'POINT', 0, 'COMMA')}">$ 10.000</dd>
+        <dt>Categoría</dt>
+        <dd th:text="${plato.categoria != null} ? ${plato.categoria.nombre} : 'Sin categoría'">Categoría</dd>
+        <dt>Ingredientes</dt>
+        <dd th:text="${plato.ingredientesComoTexto}">Ingredientes</dd>
+        <dt>Estado</dt>
+        <dd th:text="${plato.estado}">Disponible</dd>
+    </dl>
+
+    <a th:href="@{/menu}">← Volver al menú</a>
+</main>
+
+<footer th:replace="~{fragmentos/comunes :: pie}"></footer>
+</body>
+</html>
