@@ -92,14 +92,11 @@ public class PlatoServiceJpa implements PlatoService {
         return platos.save(plato);
     }
 
-    // ---------- Reglas de negocio ----------
 
     private void validarReglas(Plato datos) {
-        // Regla: precio mayor que 0
         if (datos.getPrecio() == null || datos.getPrecio().compareTo(BigDecimal.ZERO) <= 0) {
             throw new ReglaNegocioException("El precio debe ser mayor que 0");
         }
-        // Regla: nombre único (sin importar mayúsculas)
         if (datos.getNombre() == null || datos.getNombre().isBlank()) {
             throw new ReglaNegocioException("El nombre es obligatorio");
         }

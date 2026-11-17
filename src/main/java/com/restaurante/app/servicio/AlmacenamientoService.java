@@ -15,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class AlmacenamientoService {
 
-    // Tipos de imagen permitidos y la extensión con la que se guardan
     private static final Map<String, String> TIPOS = Map.of(
             "image/jpeg", ".jpg",
             "image/png", ".png",
@@ -27,7 +26,6 @@ public class AlmacenamientoService {
         this.carpeta = Path.of(carpeta).toAbsolutePath().normalize();
     }
 
-    /** Guarda la foto y devuelve el nombre del archivo generado. */
     public String guardar(MultipartFile archivo) {
         String extension = TIPOS.get(archivo.getContentType());
         if (extension == null) {
@@ -45,7 +43,6 @@ public class AlmacenamientoService {
         return nombre;
     }
 
-    /** Borra una foto si existe. */
     public void eliminar(String nombre) {
         if (nombre == null || nombre.isBlank()) {
             return;
@@ -56,7 +53,6 @@ public class AlmacenamientoService {
                 Files.deleteIfExists(archivo);
             }
         } catch (IOException e) {
-            // Si no se puede borrar, no interrumpimos la operación
         }
     }
 }

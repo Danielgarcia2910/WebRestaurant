@@ -29,7 +29,6 @@ public class ReservaService {
         this.cierre = LocalTime.parse(cierre);
     }
 
-    /** Horas que se pueden elegir: cada 30 minutos, desde la apertura hasta una hora antes del cierre. */
     public List<String> horasDisponibles() {
         List<String> horas = new ArrayList<>();
         LocalTime ultima = cierre.minusHours(1);

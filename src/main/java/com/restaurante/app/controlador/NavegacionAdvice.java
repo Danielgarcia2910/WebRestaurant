@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import com.restaurante.app.modelo.Categoria;
 import com.restaurante.app.repositorio.CategoriaRepository;
 
-/** Pone las categorías en el menú de arriba de las páginas públicas. */
 @ControllerAdvice(assignableTypes = {MenuController.class, ReservaController.class, LoginController.class})
 public class NavegacionAdvice {
 

@@ -31,7 +31,6 @@ public class ReservaController {
         this.servicio = servicio;
     }
 
-    // El cliente solo puede enviar estos campos (no puede poner el estado ni el id)
     @InitBinder("reserva")
     void camposPermitidos(WebDataBinder binder) {
         binder.setAllowedFields("nombre", "telefono", "fecha", "hora", "personas", "notas");
